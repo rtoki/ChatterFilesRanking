@@ -1,0 +1,3 @@
+<design:component>
+    <design:attribute name="group" label="Collaboration Group ID" description="Chatter Group ID you want to list up (like 0F9....)" />
+</design:component>

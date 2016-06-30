@@ -1,0 +1,6 @@
+<aura:documentation>
+	<aura:description>Documentation</aura:description>
+	<aura:example name="CFRanking" ref="CFRanking" label="Label">
+		CFRanking - Chatter File Ranking
+	</aura:example>
+</aura:documentation>

@@ -1,0 +1,7 @@
+<aura:documentation>
+	<aura:description>Documentation</aura:description>
+	<aura:example name="CFRankingApp" ref="CFRankingApp" label="Label">
+        アクセス方法: https://host/rtoki/CFRankingApp.app もしくは https://host/rtoki/CFRankingApp.app?group=groupid  (groupidは0F9....)
+        
+	</aura:example>
+</aura:documentation>
