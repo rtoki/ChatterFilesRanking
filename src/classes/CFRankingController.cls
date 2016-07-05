@@ -81,7 +81,7 @@ public class CFRankingController {
                 cdl.ContentDocument.Title,
                 cdl.ContentDocument.FileExtension,
                 cdl.ContentDocument.FileType,
-                cdl.ContentDocument.ContentSize,
+                cdl.ContentDocument.ContentSize / 1024,	//Kb
                 cdl.ContentDocument.LatestPublishedVersionId,
                 cdl.ContentDocument.CreatedBy.Name,
                 cdl.ContentDocument.LastModifiedDate);

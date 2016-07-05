@@ -5,15 +5,17 @@
         var group = cmp.get("v.group");        
 
         // groupが設定されていた場合
-        if(group) {
-            pushWeekTab(cmp, evt, helper);
+        if(group && group != '') {
+	        helper.setActiveTab(cmp, 'All');
+   		     helper.getDocs(cmp, group, 'All');
         }
     },
     onChange: function(cmp, evt, helper) {
         console.log("onChange");
-		helper.setActiveTab(cmp, 'Week');
+        // すべてで表示
+        helper.setActiveTab(cmp, 'All');
         var group = cmp.find("entityList").get("v.value");       
-        helper.getDocs(cmp, group, 'Week');
+        helper.getDocs(cmp, group, 'All');
     },
 	// tabs
     pushWeekTab : function(cmp, evt, helper) {

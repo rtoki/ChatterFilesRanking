@@ -1,0 +1,17 @@
+<apex:page sidebar="false">
+    <apex:includeLightning />
+    <div id="lightning" />
+
+    <script>
+         var group = "{!$CurrentPage.parameters.group}";
+        $Lightning.use("rtoki:CFRankingVF", function() {
+            $Lightning.createComponent(
+                "rtoki:CFRanking",
+                { group : group}, 
+                "lightning",
+                  function(cmp) {
+                      console.log("Component created!");
+                  });
+        });
+    </script>    
+</apex:page>

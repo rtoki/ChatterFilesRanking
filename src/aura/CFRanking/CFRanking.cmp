@@ -1,19 +1,19 @@
 <aura:component controller="CFRankingController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
-    <ltng:require styles="/resource/SLDS/assets/styles/salesforce-lightning-design-system.min.css"
-                />	<!-- using SLDS 2.01, JQuery 3.0.0 -->
-  
+    <ltng:require styles="/resource/rtoki__SLDS/assets/styles/salesforce-lightning-design-system.css"/>
     
     <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
-    <aura:attribute name="group" type="String" default="" description="グループID。外部からパラメタとして渡せるようにString型にしている" /> 
+    <aura:attribute name="group" type="String" default="" access="global" description="グループID。外部からパラメタとして渡せるようにString型にしている" /> 
     <aura:attribute name="groupName" type="String" default="" description="グループ名"/>
     <aura:attribute name="entities" type="CollaborationGroup[]" description="グループのリスト"/>
     <aura:attribute name="docs" type="CFRankingDoc" description="ランキングの情報リスト"/>
+    
+    
     <div class="slds">
-        <div class="slds-page-header" role="banner">
-            <div class="slds-grid">
-                <div class="slds-col slds-has-flexi-truncate">
-                    <div class="slds-grid">
-                        <aura:if isTrue="{! (v.group == '') ? true : false }">
+        <aura:if isTrue="{!(v.group == '') ? true : false }">
+            <div class="slds-page-header" role="banner">
+                <div class="slds-grid">
+                    <div class="slds-col slds-has-flexi-truncate">
+                        <div class="slds-grid">
                             <div class="slds-form-element">
                                 <div class="slds-form-element__control">
                                     <div class="slds-select_container">
@@ -26,34 +26,37 @@
                                     </div>
                                 </div>
                             </div>
-                        </aura:if>
-                        <h1 class="slds-page-header__title slds-truncate" title="My Leads (truncates)"><ui:outputText aura:id="collgroupName" value="{!v.groupName}"/>  </h1>
+                            
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <aura:set attribute="else">
+                <h1 class="slds-page-header__title slds-truncate" title="{!v.groupName}"><ui:outputText aura:id="collgroupName" value="{!v.groupName}"/>  </h1>
+            </aura:set>
+        </aura:if>
         
         
         <div class="slds-tabs--default">
             <ul class="slds-tabs--default__nav" role="tablist">
+                <li class="slds-tabs--default__item slds-text-heading--label" title="すべて"  role="presentation"  aura:id="all_li">
+                    <a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="0" aria-selected="false" aria-controls="tab-default-1" aura:id="all_tab" onclick="{!c.pushAllTab}">すべて</a>
+                </li>
                 <li class="slds-tabs--default__item slds-text-heading--label" title="今週" role="presentation" aura:id="week_li">
-                    <a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="0" aria-selected="true" aria-controls="tab-default-1" aura:id="week_tab" onclick="{!c.pushWeekTab}">今週</a>
+                    <a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="true" aria-controls="tab-default-2" aura:id="week_tab" onclick="{!c.pushWeekTab}">今週</a>
                 </li>
                 <li class="slds-tabs--default__item slds-text-heading--label" title="今月" role="presentation"  aura:id="month_li">
-                    <a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-2" aura:id="month_tab" onclick="{!c.pushMonthTab}">今月</a>
+                    <a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-3" aura:id="month_tab" onclick="{!c.pushMonthTab}">今月</a>
                 </li>
                 <li class="slds-tabs--default__item slds-text-heading--label" title="今年" role="presentation"  aura:id="year_li">
-                    <a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-3" aura:id="year_tab" onclick="{!c.pushYearTab}">今年</a>
-                </li>
-                <li class="slds-tabs--default__item slds-text-heading--label" title="すべて"  role="presentation"  aura:id="all_li">
-                    <a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-4" aura:id="all_tab" onclick="{!c.pushAllTab}">すべて</a>
+                    <a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-4" aura:id="year_tab" onclick="{!c.pushYearTab}">今年</a>
                 </li>
             </ul>
         </div>
         
         <ul class="slds-list--vertical slds-has-dividers--bottom-space slds-has-selection">
             <aura:iteration items="{!v.docs}" var="dl" indexVar="index">
-                <li class="slds-list__item">
+                <li class="slds-item">
                     <div class="slds-media slds-tile">
                         <div class="slds-media__figure">
                             <a href="{! '/' + dl.latestPublishedVersionId}" target="_blank">
@@ -61,21 +64,25 @@
                             </a>
                         </div>
                         <div class="slds-media__body">
-                            <div class="slds-grid slds-has-flexi-truncate">
-                                <p class="slds-tile__title slds-truncate">{!index+1}. &nbsp;<a href="{! '/' + dl.latestPublishedVersionId}" target="_blank">{!dl.title}.{!dl.fileExtension}</a></p>
-                            </div>
-                            <ul class="slds-tile__detail slds-list--horizontal slds-has-dividers slds-text-body--small">
-                                <li class="slds-truncate slds-list__item"><ui:outputDateTime value="{! dl.lastModifiedDate}"/></li>
-                                <li class="slds-truncate slds-list__item">{! dl.contentSize}</li>
-                                <li class="slds-truncate slds-list__item">{! dl.userName}</li>
-                                <aura:if isTrue="{! (dl.feedEntityId != null) ? true : false }">
-                                    <li class="slds-truncate slds-list__item"><a href="{! '/' + dl.feedEntityId}" target="_blank">Chatter</a></li>
-                                </aura:if>
-                                <aura:if isTrue="{! (dl.feedLikeCount != null) ? true : false }">
-                                    <li class="slds-truncate slds-list__item">{! dl.feedLikeCount} いいね!</li>
-                                </aura:if>
-                                <li class="slds-truncate slds-list__item">{! dl.downloadCountByUser} ダウンロード</li>
-                            </ul>
+                            <p class="slds-truncate">{!index+1}. &nbsp;<a href="{! '/' + dl.latestPublishedVersionId}" target="_blank">{!dl.title}.{!dl.fileExtension}</a></p>
+                            <p class="slds-truncate">
+                                <ul class="slds-tile__detail slds-list--horizontal slds-has-dividers slds-text-body--small">
+                                    <li class="slds-list__item"><ui:outputDateTime value="{! dl.lastModifiedDate}" format="yyyy/MM/dd" /></li>
+                                    <li class="slds-list__item"><ui:outputNumber value="{! dl.contentSize}"/>KB </li>
+                                    <li class="slds-truncate slds-list__item">{! dl.userName}</li>
+                                </ul>
+                            </p>
+                            <p class="slds-truncate">
+                                <ul class="slds-tile__detail slds-list--horizontal slds-has-dividers slds-text-body--small">
+                                    <li class="slds-list__item">{! dl.downloadCountByUser} ダウンロード</li>
+                                    <aura:if isTrue="{! (dl.feedLikeCount != null) ? true : false }">
+                                        <li class="slds-list__item">{! dl.feedLikeCount} いいね!</li>
+                                    </aura:if>
+                                    <aura:if isTrue="{! (dl.feedEntityId != null) ? true : false }">
+                                        <li class="slds-list__item"><a href="{! '/' + dl.feedEntityId}" target="_blank">Chatterへ</a></li>
+                                    </aura:if>
+                                </ul>
+                            </p>
                         </div>
                     </div>
                 </li>
